@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 32,
     color: Colors.Labels.primary,
-    includeFontPadding: false,
   },
   accessory: {
     flex: 1,

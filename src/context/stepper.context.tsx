@@ -1,12 +1,19 @@
 import { usePathname } from 'expo-router';
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 
-import ScreenWrapper from '@components/screen_wrapper';
-import StepperNavigation from '@components/stepper_navigation';
 import type { DietaryNeedId } from '@data/dietary_needs';
 import type { NutritionalGoalId } from '@data/nutritional_goals';
-import { Colors, Spacings } from '@theme';
+import { generateWeeklyMealPlan } from '@services/meal_plan';
+
+import type { WeeklyMealPlan } from 'types/meal_plan';
 
 export const DEFAULT_BUDGET = 82;
 export const STEPPER_TOTAL_STEPS = 4;
@@ -33,6 +40,10 @@ type StepperContextValue = {
   setDietaryNeeds: (dietaryNeeds: DietaryNeedId[]) => void;
   nutritionalGoals: NutritionalGoalId[];
   setNutritionalGoals: (nutritionalGoals: NutritionalGoalId[]) => void;
+  mealPlan: WeeklyMealPlan | null;
+  isGeneratingMealPlan: boolean;
+  mealPlanError: string | null;
+  generateMealPlan: () => Promise<void>;
   currentStep: number;
   totalSteps: number;
   title: string;
@@ -65,10 +76,52 @@ const stepFromPathname = (pathname: string) => {
 
 export const StepperProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
+  const generationIdRef = useRef(0);
+  const isGeneratingRef = useRef(false);
   const [budget, setBudget] = useState(DEFAULT_BUDGET);
   const [dietaryNeeds, setDietaryNeeds] = useState<DietaryNeedId[]>([]);
   const [nutritionalGoals, setNutritionalGoals] = useState<NutritionalGoalId[]>([]);
+  const [mealPlan, setMealPlan] = useState<WeeklyMealPlan | null>(null);
+  const [isGeneratingMealPlan, setIsGeneratingMealPlan] = useState(false);
+  const [mealPlanError, setMealPlanError] = useState<string | null>(null);
   const { currentStep, title } = stepFromPathname(pathname);
+
+  const generateMealPlan = useCallback(async () => {
+    if (isGeneratingRef.current) {
+      return;
+    }
+
+    const generationId = generationIdRef.current + 1;
+    generationIdRef.current = generationId;
+    isGeneratingRef.current = true;
+    setIsGeneratingMealPlan(true);
+    setMealPlan(null);
+    setMealPlanError(null);
+
+    try {
+      const plan = await generateWeeklyMealPlan({
+        budget,
+        dietaryNeeds,
+        nutritionalGoals,
+      });
+      if (generationIdRef.current !== generationId) {
+        return;
+      }
+      setMealPlan(plan);
+    } catch (error) {
+      if (generationIdRef.current !== generationId) {
+        return;
+      }
+      setMealPlanError(
+        error instanceof Error ? error.message : 'Could not generate the meal plan.'
+      );
+    } finally {
+      if (generationIdRef.current === generationId) {
+        isGeneratingRef.current = false;
+        setIsGeneratingMealPlan(false);
+      }
+    }
+  }, [budget, dietaryNeeds, nutritionalGoals]);
 
   const value = useMemo(
     () => ({
@@ -78,30 +131,26 @@ export const StepperProvider = ({ children }: { children: ReactNode }) => {
       setDietaryNeeds,
       nutritionalGoals,
       setNutritionalGoals,
+      mealPlan,
+      isGeneratingMealPlan,
+      mealPlanError,
+      generateMealPlan,
       currentStep,
       totalSteps: STEPPER_TOTAL_STEPS,
       title,
     }),
-    [budget, currentStep, dietaryNeeds, nutritionalGoals, title]
+    [
+      budget,
+      currentStep,
+      dietaryNeeds,
+      generateMealPlan,
+      isGeneratingMealPlan,
+      mealPlan,
+      mealPlanError,
+      nutritionalGoals,
+      title,
+    ]
   );
 
-  return (
-    <StepperContext.Provider value={value}>
-      <ScreenWrapper style={styles.screen} safeAreaEdges={['top', 'bottom']}>
-        <StepperNavigation />
-        <View style={styles.body}>{children}</View>
-      </ScreenWrapper>
-    </StepperContext.Provider>
-  );
+  return <StepperContext.Provider value={value}>{children}</StepperContext.Provider>;
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.Backgrounds.screen,
-    paddingTop: Spacings['2xl'],
-  },
-  body: {
-    flex: 1,
-  },
-});

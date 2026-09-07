@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     fontSize: TextTokens.Sizes.h5,
     letterSpacing: TextTokens.Tracking.button,
     color: TextTokens.Colors.onAccent,
-    includeFontPadding: false,
   },
   labelDisabled: {
     color: TextTokens.Colors.quaternary,

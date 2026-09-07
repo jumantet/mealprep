@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import Button from '@components/button';
@@ -13,7 +14,7 @@ const NUTRITIONAL_OPTIONS = NUTRITIONAL_GOAL_OPTIONS.map(({ id, label, emoji }) 
 }));
 
 const NutritionalGoalsSelectionScreen = () => {
-  const { nutritionalGoals, setNutritionalGoals } = useStepper();
+  const { nutritionalGoals, setNutritionalGoals, generateMealPlan } = useStepper();
 
   return (
     <View style={styles.body}>
@@ -34,6 +35,10 @@ const NutritionalGoalsSelectionScreen = () => {
           title="Continue"
           disabled={nutritionalGoals.length === 0}
           style={styles.button}
+          onPress={() => {
+            generateMealPlan();
+            router.push('/weekly-meal-plan');
+          }}
         />
       </View>
     </View>
