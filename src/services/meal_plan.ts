@@ -14,7 +14,7 @@ import type { Product } from 'types/product';
 const MAX_INGREDIENTS = 48;
 const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_MODEL = 'gpt-4o-mini';
-const REQUEST_TIMEOUT_MS = 45000;
+const REQUEST_TIMEOUT_MS = 60000;
 
 export type CatalogIngredient = {
   name: string;
@@ -208,12 +208,13 @@ export const generateWeeklyMealPlan = async ({
       body: JSON.stringify({
         model: OPENAI_MODEL,
         temperature: 0.7,
+        max_tokens: 4096,
         response_format: { type: 'json_object' },
         messages: [
           {
             role: 'system',
             content:
-              'You are a meal-prep chef. Reply with JSON only. Use the provided grocery catalog as the ingredient source.',
+              'You are a meal-prep chef who coaches people through cooking at home. Reply with JSON only. Use the provided grocery catalog as the ingredient source. Recipes are a cook-along: second person, one clear action per step, with heat, timing, and doneness cues so the cook always knows what to do next.',
           },
           {
             role: 'user',
@@ -224,6 +225,10 @@ export const generateWeeklyMealPlan = async ({
                 'Prefer catalog products for ingredients; include name and quantity.',
                 'Each meal needs prepTimeMinutes, servings, pricePerServing, ingredients, and recipe steps.',
                 'estimatedWeeklyCost must be the sum of all meal costs for the week.',
+                'Each recipe must have 6 to 9 steps. Never fewer than 6.',
+                'Walk the cook from mise en place through heat, cooking, seasoning, finishing, and plating.',
+                'Each step is 1–2 sentences, starts with a verb, and includes a time or visual cue when useful (sizzle, golden, fork-tender).',
+                'Tone: encouraging and specific, like a coach in the kitchen. No vague steps such as "cook the food" or "enjoy".',
               ],
               dietaryNeeds: dietLabels,
               nutritionalGoals: goalLabels,
@@ -233,12 +238,20 @@ export const generateWeeklyMealPlan = async ({
                 days: [
                   {
                     day: 'monday',
-                    mealName: 'Example',
-                    prepTimeMinutes: 25,
+                    mealName: 'Lemon herb chicken with roasted veg',
+                    prepTimeMinutes: 35,
                     servings: 2,
                     pricePerServing: 4.18,
                     ingredients: [{ name: 'Product from catalog', quantity: '200g' }],
-                    recipe: ['Step one', 'Step two'],
+                    recipe: [
+                      'Set out every ingredient and pat the chicken dry so it browns instead of steaming.',
+                      'Heat a splash of oil in a large pan over medium-high until it shimmers, about 1 minute.',
+                      'Season the chicken well, then sear 4–5 minutes per side until the skin is deep golden.',
+                      'Lower the heat to medium, add the vegetables, and toss until they pick up the pan juices.',
+                      'Cover and cook 8–10 minutes, until the chicken is cooked through and the veg is tender.',
+                      'Squeeze over lemon, taste, and add salt or herbs until it tastes bright.',
+                      'Rest 2 minutes, then plate and spoon the pan juices over the top.',
+                    ],
                   },
                 ],
               },

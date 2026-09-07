@@ -66,9 +66,12 @@ const MealCard = ({ meal }: MealCardProps) => {
         ))}
         <Text style={styles.sectionTitle}>Recipe</Text>
         {meal.recipe.map((step, index) => (
-          <Text key={`${index}-${step}`} style={styles.bodyText}>
-            {index + 1}. {step}
-          </Text>
+          <View key={`${index}-${step}`} style={styles.step}>
+            <View style={styles.stepBadge}>
+              <Text style={styles.stepNumber}>{index + 1}</Text>
+            </View>
+            <Text style={styles.stepText}>{step}</Text>
+          </View>
         ))}
       </ScrollView>
     </View>
@@ -129,6 +132,33 @@ const styles = StyleSheet.create({
     color: TextTokens.Colors.primary,
   },
   bodyText: {
+    fontFamily: Fonts.regular,
+    fontSize: TextTokens.Sizes.p2,
+    lineHeight: 22,
+    color: TextTokens.Colors.secondary,
+  },
+  step: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacings.md,
+    marginTop: Spacings.sm,
+  },
+  stepBadge: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: Radius.full,
+    backgroundColor: Colors.Accents.green,
+  },
+  stepNumber: {
+    fontFamily: Fonts.semiBold,
+    fontSize: TextTokens.Sizes.p3,
+    color: TextTokens.Colors.onAccent,
+    includeFontPadding: false,
+  },
+  stepText: {
+    flex: 1,
     fontFamily: Fonts.regular,
     fontSize: TextTokens.Sizes.p2,
     lineHeight: 22,
