@@ -6,9 +6,12 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "mealprep",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android"],
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "supportsTablet": false,
+      "bundleIdentifier": "com.mealprep.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,18 +20,31 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "predictiveBackGestureEnabled": false,
+      "package": "com.mealprep.app"
     },
     "plugins": [
       "expo-router",
       [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Promo-UltraLight.ttf",
+            "./assets/fonts/Promo-Thin.ttf",
+            "./assets/fonts/Promo-ExtraLight.ttf",
+            "./assets/fonts/Promo-Light.ttf",
+            "./assets/fonts/Promo-Regular.ttf",
+            "./assets/fonts/Promo-Normal.ttf",
+            "./assets/fonts/Promo-Medium.ttf",
+            "./assets/fonts/Promo-SemiBold.ttf",
+            "./assets/fonts/Promo-Bold.ttf"
+          ]
+        }
+      ],
+      [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#FFFFFF",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
@@ -36,6 +52,7 @@
     ],
     "experiments": {
       "typedRoutes": true,
+      "tsconfigPaths": true,
       "reactCompiler": true
     }
   }

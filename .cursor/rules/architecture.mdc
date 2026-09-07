@@ -1,0 +1,14 @@
+---
+description: Mealprep architecture (hub) — thin routes, containers, aliases, StyleSheet
+alwaysApply: true
+---
+
+# Architecture
+
+- `app/` = Expo Router routes only (no UI logic). Screens live in `src/containers/`.
+- Reuse `src/components/` for shared UI. Colocate folder-specific UI under the container.
+- Folders: `snake_case`. Components: `PascalCase`. Import aliases: `@components`, `@containers`, `@hooks`, `@services`, `@theme`, `@data`, `@utils`, `types/`.
+- Style with `StyleSheet` + tokens from `@theme` (Colors, Spacings, Radius, Text, Fonts). No NativeWind, no CSS, no Expo web.
+- Data comes from `src/data/*.json` via `src/services`. No API client.
+- Use `router` from `expo-router`, not `useRouter`.
+- When a Figma URL is given, use the Figma MCP before inventing UI. Fonts live in `assets/fonts/` and are mapped in `src/theme/fonts.ts`.

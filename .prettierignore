@@ -1,0 +1,8 @@
+node_modules
+.agents
+.cursor/skills/expo-animation
+.cursor/skills/expo-design-system
+.cursor/skills/expo-native-ui
+.cursor/skills/expo-overview
+.cursor/skills/expo-router
+.cursor/skills/react-native-best-practices

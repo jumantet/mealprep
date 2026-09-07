@@ -1,0 +1,13 @@
+---
+description: Figma MCP — extract design context and assets, never invent placeholders
+alwaysApply: true
+---
+
+# Figma MCP
+
+When the user pastes a Figma URL or asks to implement a mockup:
+
+1. Use the Figma MCP (`get_design_context` / screenshot) before writing UI.
+2. Map Figma tokens to `@theme` (colors, spacing, type, radius). Do not hardcode one-off values if a token exists.
+3. If the MCP returns a localhost image/SVG URL, use that URL as-is. Do not replace it with a placeholder, icon library, or guessed asset.
+4. Implement in `src/containers/` + `src/components/`, keep `app/` files thin.
