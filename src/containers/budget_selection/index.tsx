@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import Button from '@components/button';
@@ -29,7 +30,11 @@ const BudgetSelectionScreen = () => {
         </View>
       </View>
       <View style={styles.cta}>
-        <Button title="Continue" style={styles.button} />
+        <Button
+          title="Continue"
+          style={styles.button}
+          onPress={() => router.push('/dietary-needs-selection')}
+        />
       </View>
     </View>
   );

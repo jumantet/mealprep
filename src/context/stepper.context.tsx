@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 import ScreenWrapper from '@components/screen_wrapper';
 import StepperNavigation from '@components/stepper_navigation';
+import type { DietaryNeedId } from '@data/dietary_needs';
 import { Colors, Spacings } from '@theme';
 
 export const DEFAULT_BUDGET = 82;
@@ -14,11 +15,17 @@ export const STEPPER_STEPS = [
     path: '/budget-selection',
     title: 'What’s your budget?',
   },
+  {
+    path: '/dietary-needs-selection',
+    title: 'Any dietary needs?',
+  },
 ] as const;
 
 type StepperContextValue = {
   budget: number;
   setBudget: (budget: number) => void;
+  dietaryNeeds: DietaryNeedId[];
+  setDietaryNeeds: (dietaryNeeds: DietaryNeedId[]) => void;
   currentStep: number;
   totalSteps: number;
   title: string;
@@ -52,17 +59,20 @@ const stepFromPathname = (pathname: string) => {
 export const StepperProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [budget, setBudget] = useState(DEFAULT_BUDGET);
+  const [dietaryNeeds, setDietaryNeeds] = useState<DietaryNeedId[]>([]);
   const { currentStep, title } = stepFromPathname(pathname);
 
   const value = useMemo(
     () => ({
       budget,
       setBudget,
+      dietaryNeeds,
+      setDietaryNeeds,
       currentStep,
       totalSteps: STEPPER_TOTAL_STEPS,
       title,
     }),
-    [budget, currentStep, title]
+    [budget, currentStep, dietaryNeeds, title]
   );
 
   return (
