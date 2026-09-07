@@ -14,7 +14,7 @@ Same layout as hub, stripped down: Expo Router + TypeScript, mobile only, local 
 
 ```
 app/                    # routes only — import a container, render it
-src/containers/         # screens (`home`, …)
+src/containers/         # screens (`lander`, …)
 src/components/         # shared UI (`screen_wrapper`, …)
 src/hooks/              # `useProducts`, later screen hooks
 src/services/           # read JSON (`products.ts`)

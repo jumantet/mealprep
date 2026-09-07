@@ -1,5 +1,5 @@
-import HomeScreen from '@containers/home';
+import LanderScreen from '@containers/lander';
 
-export default function Home() {
-  return <HomeScreen />;
+export default function Lander() {
+  return <LanderScreen />;
 }
