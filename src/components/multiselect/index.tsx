@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   tile: {
     flexGrow: 1,
     flexBasis: '45%',
-    minHeight: 120,
+    height: 104,
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacings.sm,

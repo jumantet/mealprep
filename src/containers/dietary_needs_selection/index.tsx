@@ -50,8 +50,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   grid: {
+    flexGrow: 1,
+    justifyContent: 'center',
     paddingHorizontal: Spacings['2xl'],
-    paddingTop: Spacings['5xl'],
   },
   cta: {
     paddingHorizontal: Spacings['2xl'],
