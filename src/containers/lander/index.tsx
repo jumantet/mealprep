@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import Button from '@components/button';
@@ -13,7 +14,11 @@ const LanderScreen = () => {
         <Text style={styles.title}>MealPrep</Text>
         <Hero />
         <View style={styles.cta}>
-          <Button title="Create your meal plan" style={styles.button} />
+          <Button
+            title="Create your meal plan"
+            onPress={() => router.push('/budget-selection')}
+            style={styles.button}
+          />
         </View>
       </View>
     </ScreenWrapper>
