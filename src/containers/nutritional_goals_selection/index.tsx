@@ -1,20 +1,19 @@
-import { router } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import Button from '@components/button';
 import Multiselect from '@components/multiselect';
 import { useStepper } from '@context/stepper.context';
-import { DIETARY_NEED_OPTIONS } from '@data/dietary_needs';
+import { NUTRITIONAL_GOAL_OPTIONS } from '@data/nutritional_goals';
 import { Spacings } from '@theme';
 
-const DIETARY_OPTIONS = DIETARY_NEED_OPTIONS.map(({ id, label, emoji }) => ({
+const NUTRITIONAL_OPTIONS = NUTRITIONAL_GOAL_OPTIONS.map(({ id, label, emoji }) => ({
   value: id,
   label,
   emoji,
 }));
 
-const DietaryNeedsSelectionScreen = () => {
-  const { dietaryNeeds, setDietaryNeeds } = useStepper();
+const NutritionalGoalsSelectionScreen = () => {
+  const { nutritionalGoals, setNutritionalGoals } = useStepper();
 
   return (
     <View style={styles.body}>
@@ -24,25 +23,24 @@ const DietaryNeedsSelectionScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <Multiselect
-          options={DIETARY_OPTIONS}
-          value={dietaryNeeds}
-          onChange={setDietaryNeeds}
+          options={NUTRITIONAL_OPTIONS}
+          value={nutritionalGoals}
+          onChange={setNutritionalGoals}
           exclusiveValues={['none']}
         />
       </ScrollView>
       <View style={styles.cta}>
         <Button
           title="Continue"
-          disabled={dietaryNeeds.length === 0}
+          disabled={nutritionalGoals.length === 0}
           style={styles.button}
-          onPress={() => router.push('/nutritional-goals-selection')}
         />
       </View>
     </View>
   );
 };
 
-export default DietaryNeedsSelectionScreen;
+export default NutritionalGoalsSelectionScreen;
 
 const styles = StyleSheet.create({
   body: {
